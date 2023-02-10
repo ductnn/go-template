@@ -2,21 +2,35 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case "GET":
-			w.Write([]byte("Dummy"))
-		default:
-			w.WriteHeader(http.StatusMethodNotAllowed)
-		}
-	})
+	var a []int
 
-	err := http.ListenAndServe(":8080", nil)
+	topics := []string{"golang", "boilerplate"}
+
+	repos, err := getReposFromTopics(topics)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
+
+	fmt.Println("Repositories:")
+	for _, repo := range repos {
+		a = append(a, repo.StargazersCount)
+		// count := 1
+		// fmt.Printf("- %s/%s: %d\n", repo.Owner.Login, repo.Name, repo.StargazersCount)
+		fmt.Println("-", repo.RepoUrl)
+
+	}
+
+	for i := 0; i < len(repos); i++ {
+		if repos[i].StargazersCount == max(a) {
+			// CloneGitUrl()
+			fmt.Println()
+			fmt.Println("Dumaaaaaaaaaaa:", repos[i].RepoUrl, "-", repos[i].StargazersCount)
+			break
+		}
+	}
+
+	CloneGitUrlMaxStar()
 }
