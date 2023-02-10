@@ -1,36 +1,34 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strings"
 )
 
 func main() {
-	var a []int
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Printf("\x1b[34;1m%s\x1b[0m", "Enter topics: ")
+	text, _ := reader.ReadString('\n')
+	topics := strings.Split(strings.TrimSpace(text), ",")
 
-	topics := []string{"golang", "boilerplate"}
+	getInfoRepo(topics)
 
-	repos, err := getReposFromTopics(topics)
-	if err != nil {
-		panic(err)
+	var choice int
+	fmt.Println()
+	fmt.Printf("\x1b[34;1m%s\x1b[0m\n", "Enter your choices:")
+	fmt.Println("[1] Clone all repos <Be careful with this command>")
+	fmt.Println("[2] Clone repo with the highest score")
+	fmt.Println("[3] End ...")
+	fmt.Scanf("%d", &choice)
+
+	switch choice {
+	case 1:
+		CloneGitUrl(topics)
+	case 2:
+		CloneGitUrlMaxStar(topics)
+	default:
+		break
 	}
-
-	fmt.Println("Repositories:")
-	for _, repo := range repos {
-		a = append(a, repo.StargazersCount)
-		// count := 1
-		// fmt.Printf("- %s/%s: %d\n", repo.Owner.Login, repo.Name, repo.StargazersCount)
-		fmt.Println("-", repo.RepoUrl)
-
-	}
-
-	for i := 0; i < len(repos); i++ {
-		if repos[i].StargazersCount == max(a) {
-			// CloneGitUrl()
-			fmt.Println()
-			fmt.Println("Dumaaaaaaaaaaa:", repos[i].RepoUrl, "-", repos[i].StargazersCount)
-			break
-		}
-	}
-
-	CloneGitUrlMaxStar()
 }
