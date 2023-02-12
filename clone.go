@@ -10,6 +10,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/olekukonko/tablewriter"
 )
 
 const (
@@ -103,10 +104,26 @@ func getInfoRepo(topics []string) {
 
 	fmt.Println()
 	fmt.Printf("\x1b[32;1m%s\x1b[0m\n", "Repositories:")
-	for _, repo := range repos {
+
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"", "Name", "Repository URL", "Star"})
+	table.SetRowLine(true)
+
+	for i, repo := range repos {
 		a = append(a, repo.StargazersCount)
-		color.HiWhite("- " + repo.RepoUrl + " - " + color.HiYellowString(strconv.Itoa(repo.StargazersCount)))
+		data := [][]string{{
+			color.WhiteString(strconv.Itoa(i)),
+			color.HiCyanString(repo.Name),
+			color.HiCyanString(repo.RepoUrl),
+			color.MagentaString(strconv.Itoa(repo.StargazersCount)),
+		}}
+
+		for _, v := range data {
+			table.Append(v)
+		}
 	}
+
+	table.Render()
 
 	for i := 0; i < len(repos); i++ {
 		if repos[i].StargazersCount == max(a) {
