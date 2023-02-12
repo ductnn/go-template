@@ -106,16 +106,33 @@ func getInfoRepo(topics []string) {
 	fmt.Printf("\x1b[32;1m%s\x1b[0m\n", "Repositories:")
 
 	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"", "Name", "Repository URL", "Star"})
+	table.SetHeader([]string{"Index", "Name", "Repository URL", "Description", "Star"})
 	table.SetRowLine(true)
+
+	table.SetColumnColor(
+		tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiGreenColor},
+		tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiBlueColor},
+		tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiMagentaColor},
+		tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+		tablewriter.Colors{tablewriter.Bold, tablewriter.FgYellowColor},
+	)
+
+	table.SetHeaderColor(
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+	)
 
 	for i, repo := range repos {
 		a = append(a, repo.StargazersCount)
 		data := [][]string{{
-			color.WhiteString(strconv.Itoa(i)),
-			color.HiCyanString(repo.Name),
-			color.HiCyanString(repo.RepoUrl),
-			color.MagentaString(strconv.Itoa(repo.StargazersCount)),
+			strconv.Itoa(i),
+			repo.Name,
+			repo.RepoUrl,
+			repo.Description,
+			strconv.Itoa(repo.StargazersCount),
 		}}
 
 		for _, v := range data {

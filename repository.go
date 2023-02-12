@@ -7,6 +7,7 @@ type Repository struct {
 	} `json:"owner"`
 
 	RepoUrl         string `json:"html_url"`
+	Description     string `json:"description"`
 	CloneUrl        string `json:"clone_url"`
 	StargazersCount int    `json:"stargazers_count"`
 	DefaultBranch   string `json:"default_branch"`
